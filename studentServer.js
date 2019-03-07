@@ -1,6 +1,3 @@
-
-
-
 // express is the server that forms part of the nodejs program
 var express = require('express');
 var path = require("path");
@@ -11,13 +8,6 @@ var app = express();
 var http = require('http');
 var httpServer = http.createServer(app);
 httpServer.listen(4480);
-
-
-//You should see ‘hello world from the HTTP server’
-app.get('/',function (req,res) {
-res.send("hello world from the HTTP server");
-});
-
 
 
 
@@ -42,83 +32,91 @@ config[split[0].trim()] = split[1].trim();
 }
 var pool = new pg.Pool(config);
 
+//You should see ‘hello world from the HTTP server’
+app.get('/',function (req,res) {
+			res.send("hello world from the HTTP server");
+			});
+
+
 //test out the connection
 app.get('/postgistest', function (req,res) {
-pool.connect(function(err,client,done) {
-if(err){
-console.log("not able to get connection "+ err);
-res.status(400).send(err);
-}
-client.query('SELECT name FROM london_poi' ,function(err,result) {
-done();
-if(err){
-console.log(err);
-res.status(400).send(err);
-}
-res.status(200).send(result.rows);
-});
-});
-});
+			pool.connect(function(err,client,done) {
+			if(err){
+			console.log("not able to get connection "+ err);
+			res.status(400).send(err);
+			}
+			client.query('SELECT name FROM london_poi' ,function(err,result) {
+			done();
+			if(err){
+			console.log(err);
+			res.status(400).send(err);
+			}
+			res.status(200).send(result.rows);
+			});
+			});
+			});
 
 
 
-// adding functionality to log the requests on the console as they come in 
-app.use(function (req, res, next) {
-var filename = path.basename(req.url);
-var extension = path.extname(filename);
-console.log("The file " + filename + " was requested.");
-next();
-});
 
 
 //cross origin request (we are now going to making requests for data from this server via another server)
 var app = express();
 app.use(function(req, res, next) {
-res.header("Access-Control-Allow-Origin", "*");
-res.header("Access-Control-Allow-Headers", "X-Requested-With");
-next();
-});
+			res.header("Access-Control-Allow-Origin", "*");
+			res.header("Access-Control-Allow-Headers", "X-Requested-With");
+			next();
+			});
 
 
 
 app.post('/reflectData',function(req,res){
-// note that we are using POST here as we are uploading data
-// so the parameters form part of the BODY of the request rather
-//than the RESTful API
-console.dir(req.body);
-// for now, just echo the request back to the client
-res.send(req.body);
-});
+			// note that we are using POST here as we are uploading data
+			// so the parameters form part of the BODY of the request rather
+			//than the RESTful API
+			console.dir(req.body);
+			// for now, just echo the request back to the client
+			res.send(req.body);
+			});
 
 
 app.post('/uploadData',function(req,res){
-// note that we are using POST here as we are uploading data
-// so the parameters form part of the BODY of the request rather than the
-// RESTful API
-console.dir(req.body);
-pool.connect(function(err,client,done) {
-if(err){
-console.log("not able to get connection "+ err);
-res.status(400).send(err);
-}
+			// note that we are using POST here as we are uploading data
+			// so the parameters form part of the BODY of the request rather than the
+			// RESTful API
+			console.dir(req.body);
+			pool.connect(function(err,client,done) {
+			if(err){
+			console.log("not able to get connection "+ err);
+			res.status(400).send(err);
+			}
 
-var name = req.body.name;
-var surname = req.body.surname;
-var module = req.body.module;
-var portnum = req.body.port_id;
+			var name = req.body.name;
+			var surname = req.body.surname;
+			var module = req.body.module;
+			var portnum = req.body.port_id;
 
-var querystring = "INSERT into formdata (name,surname,module, port_id) values ($1,$2,$3,$4) ";
-console.log(querystring);
-client.query( querystring,[name,surname,module,portnum],function(err,result) {
-done();
-if(err){
-console.log(err);
-res.status(400).send(err);
-}
-res.status(200).send("row inserted");
-});
-});
-});
+			var querystring = "INSERT into formdata (name,surname,module, port_id) values ($1,$2,$3,$4) ";
+			console.log(querystring);
+			client.query( querystring,[name,surname,module,portnum],function(err,result) {
+			done();
+			if(err){
+			console.log(err);
+			res.status(400).send(err);
+			}
+			res.status(200).send("row inserted");
+			});
+			});
+			});
+
+
+// adding functionality to log the requests on the console as they come in 
+app.use(function (req, res, next) {
+			var filename = path.basename(req.url);
+			var extension = path.extname(filename);
+			console.log("The file " + filename + " was requested.");
+			next();
+			});
 
 
 // serve static files - e.g. html, css
