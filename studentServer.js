@@ -9,6 +9,8 @@ var http = require('http');
 var httpServer = http.createServer(app);
 httpServer.listen(4480);
 
+
+//You should see ‘hello world from the HTTP server’
 app.get('/',function (req,res) {
 res.send("hello world from the HTTP server");
 });
