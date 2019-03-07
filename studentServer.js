@@ -14,3 +14,11 @@ httpServer.listen(4480);
 app.get('/',function (req,res) {
 res.send("hello world from the HTTP server");
 });
+
+// adding functionality to log the requests on the console as they come in 
+app.use(function (req, res, next) {
+var filename = path.basename(req.url);
+var extension = path.extname(filename);
+console.log("The file " + filename + " was requested.");
+next();
+});
