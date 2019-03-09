@@ -1,11 +1,12 @@
-// express is the server that forms part of the nodejs program
+
+// 1. express is the server that forms part of the nodejs program
 var express = require('express');
 var path = require("path");
 var app = express();
 
 
 
-// add an http server to serve files to the Edge browser
+// 2. add an http server to serve files to the Edge browser
 // due to certificate issues it rejects the https files if they are not
 // directly called in a typed URL
 var http = require('http');
@@ -13,7 +14,7 @@ var httpServer = http.createServer(app);
 httpServer.listen(4480);
 
 
-// adding functionality to log the requests
+// 4. adding functionality to log the requests
 app.use(function (req, res, next) {
 	var filename = path.basename(req.url);
 	var extension = path.extname(filename);
@@ -21,13 +22,14 @@ app.use(function (req, res, next) {
 	next();
 	});
 
-
+// 3. 
 app.get('/',function (req,res) {
 	res.send("hello world from the HTTP server (Rui Server)");
 	});
 
 
-//the server returns test.html when it is requested
+//5. the server returns test.html when it is requested
+// serve an HTML file
 app.get('/test.html', function (req, res) {
 	// run some server-side code
 	console.log('test.html requested');
@@ -35,4 +37,13 @@ app.get('/test.html', function (req, res) {
 	res.sendFile(__dirname + '/test.html');
 	});
 
+
+// serve any HTML file
+app.get('/:fileName', function (req, res) {
+	// run some server-side code
+	var fileName = req.params.fileName;
+	console.log(fileName + ' requested');
+	// note that __dirname gives the path to the studentServer.js file
+	res.sendFile(__dirname + '/'+ fileName);
+	});
 
