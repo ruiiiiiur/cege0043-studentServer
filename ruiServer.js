@@ -11,10 +11,20 @@ var app = express();
 var http = require('http');
 var httpServer = http.createServer(app);
 httpServer.listen(4480);
+
+
 app.get('/',function (req,res) {
 	res.send("hello world from the HTTP server (Rui Server)");
 	});
 
+
+//the server returns test.html when it is requested
+app.get('/test.html', function (req, res) {
+// run some server-side code
+console.log('test.html requested');
+// note that __dirname gives the path to the studentServer.js file
+res.sendFile(__dirname + '/test.html');
+});
 
 
 // adding functionality to log the requests
