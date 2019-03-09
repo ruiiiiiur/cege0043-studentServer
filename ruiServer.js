@@ -113,7 +113,7 @@ app.post('/reflectData',function(req,res){
 
 
 
-//2.5 connects to the database and inserts a record into the formData table
+//2.5 & 2.6 connects to the database and inserts a record into the formData table
 app.post('/uploadData',function(req,res){
 	// note that we are using POST here as we are uploading data
 	// so the parameters form part of the BODY of the request rather than the RESTful API
