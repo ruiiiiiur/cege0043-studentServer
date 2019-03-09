@@ -162,7 +162,7 @@ app.post('/uploadData',function(req,res){
 	var lecturetime = req.body.lecturetime;
 	var geometrystring = "st_geomfromtext('POINT("+req.body.longitude + " " + req.body.latitude + ")')";
 	var querystring = "INSERT into formdata (name,surname,module, port_id,language,modulelist, lecturetime, geom) values ($1,$2,$3,$4,$5,$6,$7,";
-	var querystring = querystring + geometrystring + ")";
+	querystring = querystring + geometrystring + ")";
 	console.log(querystring);
 	client.query( querystring,[name,surname,module, portnum, language,modulelist, lecturetime],function(err,result) {
 	done();
