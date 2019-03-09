@@ -79,6 +79,24 @@ app.get('/',function (req,res) {
 //	});
 
 
+// 2.3 add a simple app.get to test out the connection
+app.get('/postgistest', function (req,res) {
+pool.connect(function(err,client,done) {
+	if(err){
+	console.log("not able to get connection "+ err);
+	res.status(400).send(err);
+	}
+	client.query('SELECT name FROM london_poi' ,function(err,result) {
+	done();
+	if(err){
+	console.log(err);
+	res.status(400).send(err);
+	}
+	res.status(200).send(result.rows);
+	});
+	});
+	});
+
 
 // 1.7. serve static files - e.g. html, css
 // this should always be the last line in the server file
