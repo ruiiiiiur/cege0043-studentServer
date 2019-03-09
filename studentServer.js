@@ -18,6 +18,19 @@ extended: true
 }));
 app.use(bodyParser.json());
 
+
+
+//cross origin request (we are now going to making requests for data from this server via another server)
+var app = express();
+app.use(function(req, res, next) {
+			res.header("Access-Control-Allow-Origin", "*");
+			res.header("Access-Control-Allow-Headers", "X-Requested-With");
+			next();
+			});
+
+
+
+
 //Import the required database connectivity code and set up a database connection
 var fs = require('fs');
 var pg = require('pg');
@@ -34,7 +47,7 @@ var pool = new pg.Pool(config);
 
 //You should see ‘hello world from the HTTP server’
 app.get('/',function (req,res) {
-			res.send("hello world from the HTTP server");
+			res.send("hello world from the HTTP server(studentserver)");
 			});
 
 
@@ -59,14 +72,6 @@ app.get('/postgistest', function (req,res) {
 
 
 
-
-//cross origin request (we are now going to making requests for data from this server via another server)
-var app = express();
-app.use(function(req, res, next) {
-			res.header("Access-Control-Allow-Origin", "*");
-			res.header("Access-Control-Allow-Headers", "X-Requested-With");
-			next();
-			});
 
 
 
@@ -140,6 +145,8 @@ app.post('/uploadData',function(req,res){
 			});
 			});
 			});
+
+
 
 // adding functionality to log the requests on the console as they come in 
 app.use(function (req, res, next) {
